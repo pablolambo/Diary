@@ -5,7 +5,7 @@ docker pull mcr.microsoft.com/mssql/server:2022-latest
 ```
 ### Run database as docker container
 ```bash
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourStrong!Password' -p 1433:1433 --name DiaryDb -d mcr.microsoft.com/mssql/server:2022-latest
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=TMC5Vs2c2N6l!" -p 1433:1433 --name DiaryDb -d mcr.microsoft.com/mssql/server:2022-latest
 ```
 ## Database migrations
 ### Create migration

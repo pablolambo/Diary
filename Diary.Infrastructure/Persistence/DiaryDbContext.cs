@@ -2,21 +2,17 @@
 
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class DiaryDbContext : DbContext
+public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : IdentityDbContext<DiaryUser>(options)
 {
-    public DiaryDbContext(DbContextOptions<DiaryDbContext> options) : base(options) { }
-
     public DbSet<Entry> Entries { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DiaryDbContext).Assembly);
     }
-    
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     optionsBuilder.UseSqlServer("DiaryDb");
-    // }
 }
+
+

@@ -7,7 +7,7 @@ using Persistence;
 
 public class EntryRepository : IEntryRepository
 {
-    public readonly DiaryDbContext _dbContext;
+    private readonly DiaryDbContext _dbContext;
 
     public EntryRepository(DiaryDbContext dbContext)
     {
