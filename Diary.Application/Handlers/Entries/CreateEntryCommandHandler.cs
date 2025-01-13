@@ -1,4 +1,4 @@
-﻿namespace Diary.Application.Handlers;
+﻿namespace Diary.Application.Handlers.Entries;
 
 using Domain.Entities;
 using Domain.Interfaces;
@@ -17,7 +17,7 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, Gui
 
     public async Task<Guid> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
     {
-        var entry = new Entry
+        var entry = new EntryEntity
         {
             Title = request.Title,
             Content = request.Content

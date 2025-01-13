@@ -7,9 +7,9 @@ public static class MigrationExtensions
 {
     public static void ApplyMigrations(this IApplicationBuilder app)
     {
-        using IServiceScope scope = app.ApplicationServices.CreateScope();
+        using var scope = app.ApplicationServices.CreateScope();
 
-        using DiaryDbContext context = scope.ServiceProvider.GetRequiredService<DiaryDbContext>();
+        using var context = scope.ServiceProvider.GetRequiredService<DiaryDbContext>();
         
         context.Database.Migrate();
     }

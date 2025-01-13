@@ -2,11 +2,13 @@
 
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : IdentityDbContext<DiaryUser>(options)
+public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : IdentityDbContext<DiaryUserEntity>(options)
 {
-    public DbSet<Entry> Entries { get; set; }
+    public DbSet<EntryEntity> Entries { get; set; }
+    public DbSet<NotificationEntity> Notifications { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

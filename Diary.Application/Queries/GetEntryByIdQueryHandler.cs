@@ -4,9 +4,9 @@ using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record GetEntryByIdQuery(Guid EntryId) : IRequest<Entry>;
+public sealed record GetEntryByIdQuery(Guid EntryId) : IRequest<EntryEntity>;
 
-public class GetEntryByIdQueryHandler : IRequestHandler<GetEntryByIdQuery, Entry>
+public class GetEntryByIdQueryHandler : IRequestHandler<GetEntryByIdQuery, EntryEntity>
 {
     private readonly IEntryRepository _repository;
 
@@ -15,7 +15,7 @@ public class GetEntryByIdQueryHandler : IRequestHandler<GetEntryByIdQuery, Entry
         _repository = repository;
     }
 
-    public async Task<Entry?> Handle(GetEntryByIdQuery request, CancellationToken cancellationToken)
+    public async Task<EntryEntity?> Handle(GetEntryByIdQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetByIdAsync(request.EntryId, cancellationToken);
     }

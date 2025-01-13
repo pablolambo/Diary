@@ -4,9 +4,9 @@ using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record GetEntriesQuery(DateTime From, DateTime To) : IRequest<IEnumerable<Entry>>;
+public sealed record GetEntriesQuery(DateTime From, DateTime To) : IRequest<IEnumerable<EntryEntity>>;
 
-public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, IEnumerable<Entry>>
+public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, IEnumerable<EntryEntity>>
 {
     private readonly IEntryRepository _repository;
 
@@ -15,7 +15,7 @@ public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, IEnumerab
         _repository = repository;
     }
 
-    public async Task<IEnumerable<Entry>> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<EntryEntity>> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAllAsync(request.From, request.To, cancellationToken);
     }

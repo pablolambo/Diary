@@ -4,9 +4,9 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class DiaryUserConfiguration : IEntityTypeConfiguration<DiaryUser>
+public class DiaryUserConfiguration : IEntityTypeConfiguration<DiaryUserEntity>
 {
-    public void Configure(EntityTypeBuilder<DiaryUser> builder)
+    public void Configure(EntityTypeBuilder<DiaryUserEntity> builder)
     {
         
     }

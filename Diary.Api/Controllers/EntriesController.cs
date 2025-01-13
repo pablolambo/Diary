@@ -1,6 +1,7 @@
 namespace Diary.Api.Controllers;
 
 using Application.Handlers;
+using Application.Handlers.Entries;
 using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

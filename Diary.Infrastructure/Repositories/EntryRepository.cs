@@ -14,26 +14,26 @@ public class EntryRepository : IEntryRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(Entry entry, CancellationToken cancellationToken)
+    public async Task AddAsync(EntryEntity entryEntity, CancellationToken cancellationToken)
     {
-        await _dbContext.Entries.AddAsync(entry, cancellationToken);
+        await _dbContext.Entries.AddAsync(entryEntity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Entry?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<EntryEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.Entries
             .FirstOrDefaultAsync(entry => entry.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Entry>> GetAllAsync(DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<IEnumerable<EntryEntity>> GetAllAsync(DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         return await _dbContext.Entries.Where(e => e.Date >= from && e.Date <= to).ToListAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(Entry entry, CancellationToken cancellationToken)
+    public async Task UpdateAsync(EntryEntity entryEntity, CancellationToken cancellationToken)
     {
-        _dbContext.Entries.Update(entry);
+        _dbContext.Entries.Update(entryEntity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

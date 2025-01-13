@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using Handlers;
+using Handlers.Entries;
 using Microsoft.Extensions.DependencyInjection;
 using Queries;
 

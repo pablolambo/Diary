@@ -6,4 +6,4 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=TMC5Vs2c2N6l!
+      - MSSQL_SA_PASSWORD=mystrongpWD!

@@ -1,4 +1,4 @@
-﻿namespace Diary.Application.Handlers;
+﻿namespace Diary.Application.Handlers.Entries;
 
 using Domain.Interfaces;
 using MediatR;
