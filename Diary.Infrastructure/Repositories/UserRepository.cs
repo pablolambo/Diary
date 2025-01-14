@@ -30,6 +30,21 @@ public class UserRepository : IUserRepository
         return users;
     }
 
+    public async Task<UserStatisticsEntity> GetUserStatistics(string diaryUserId, CancellationToken cancellationToken)
+    {
+        var user = await GetUserById(diaryUserId, cancellationToken);
+
+        var userStats = user.Statistics;
+        
+        return userStats;
+    }
+
+    public async Task UpdateUser(DiaryUserEntity user, CancellationToken cancellationToken)
+    {
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<DiaryUserEntity> GetUserById(string diaryUserId, CancellationToken cancellationToken)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.DiaryUserId == diaryUserId, cancellationToken: cancellationToken);

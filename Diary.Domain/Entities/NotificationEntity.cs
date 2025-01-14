@@ -1,10 +1,8 @@
 namespace Diary.Domain.Entities;
 
-using System.ComponentModel.DataAnnotations;
-
 public class NotificationEntity
 {
-    [Key] public Guid Id { get; set; }
+    public Guid Id { get; set; }
     public string DiaryUserId { get; init; }
     public string Title { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;

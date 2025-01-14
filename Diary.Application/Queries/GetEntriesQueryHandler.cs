@@ -4,7 +4,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record GetEntriesQuery(DateTime From, DateTime To) : IRequest<IEnumerable<EntryEntity>>;
+public sealed record GetEntriesQuery(string UserId, DateTime From, DateTime To) : IRequest<IEnumerable<EntryEntity>>;
 
 public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, IEnumerable<EntryEntity>>
 {
@@ -17,6 +17,6 @@ public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, IEnumerab
 
     public async Task<IEnumerable<EntryEntity>> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllAsync(request.From, request.To, cancellationToken);
+        return await _repository.GetByDateRangeAsync(request.UserId, request.From, request.To, cancellationToken);
     }
 }

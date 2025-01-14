@@ -17,6 +17,6 @@ public class GetEntryByIdQueryHandler : IRequestHandler<GetEntryByIdQuery, Entry
 
     public async Task<EntryEntity?> Handle(GetEntryByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByIdAsync(request.EntryId, cancellationToken);
+        return await _repository.GetByEntryIdAsync(request.EntryId, cancellationToken);
     }
 }

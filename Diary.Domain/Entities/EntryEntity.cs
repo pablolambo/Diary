@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 public sealed record EntryEntity
 {
     [Key] public Guid Id { get; init; }
+    public string UserId { get; init; }
     public DateTime Date { get; init; } = DateTime.UtcNow;
     public string? Title { get; set; }
     public string? Content { get; set; }

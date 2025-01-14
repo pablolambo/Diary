@@ -1,9 +1,11 @@
 namespace Diary.Api.Controllers;
 
+using System.Security.Claims;
 using Application.Handlers;
 using Application.Handlers.Entries;
 using Application.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -17,9 +19,17 @@ public class EntriesController : ControllerBase
         _mediator = mediator;
     }
     
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> Create(CreateEntryCommand command)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+
+        command.UserId = userId;
+        
         var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id }, id);
     }

@@ -16,7 +16,7 @@ public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Gui
 
     public async Task<Guid> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
     {
-        var entry = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        var entry = await _repository.GetByEntryIdAsync(request.Id, cancellationToken);
 
         if (entry == null) return Guid.Empty;
         
