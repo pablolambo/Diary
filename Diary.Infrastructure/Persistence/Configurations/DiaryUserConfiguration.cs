@@ -10,5 +10,18 @@ public class DiaryUserConfiguration : IEntityTypeConfiguration<DiaryUserEntity>
     {
         builder.HasKey(e => e.DiaryUserId);
         builder.Property(u => u.DiaryUserId).IsRequired().HasMaxLength(32);
+        
+        builder.OwnsOne(u => u.Statistics, statistics =>
+        {
+            statistics.Property(s => s.TotalEntries).IsRequired();
+            statistics.Property(s => s.FirstEntryDate);
+            statistics.Property(s => s.LastEntryDate);
+            statistics.Property(s => s.CurrentDayStreak).IsRequired();
+            statistics.Property(s => s.AverageEntriesPerWeek).IsRequired();
+            statistics.Property(s => s.FavoriteEntries).IsRequired();
+            statistics.Property(s => s.MostUsedTags)
+                .HasConversion(tags => string.Join(',', tags),
+                    tags => tags.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+        });
     }
 }

@@ -129,13 +129,11 @@ namespace Diary.Infrastructure.Migrations
 
                     b.Property<string>("DiaryUserId")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ScheduledTime")
                         .HasColumnType("datetime2");
@@ -145,8 +143,7 @@ namespace Diary.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -155,7 +152,7 @@ namespace Diary.Infrastructure.Migrations
 
                     b.HasIndex("DiaryUserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("NotificationEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -289,6 +286,47 @@ namespace Diary.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.DiaryUserEntity", b =>
+                {
+                    b.OwnsOne("Diary.Domain.Entities.UserStatisticsEntity", "Statistics", b1 =>
+                        {
+                            b1.Property<string>("DiaryUserEntityDiaryUserId")
+                                .HasColumnType("nvarchar(32)");
+
+                            b1.Property<double>("AverageEntriesPerWeek")
+                                .HasColumnType("float");
+
+                            b1.Property<int>("CurrentDayStreak")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("FavoriteEntries")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("FirstEntryDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("LastEntryDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("MostUsedTags")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("TotalEntries")
+                                .HasColumnType("int");
+
+                            b1.HasKey("DiaryUserEntityDiaryUserId");
+
+                            b1.ToTable("AspNetUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DiaryUserEntityDiaryUserId");
+                        });
+
+                    b.Navigation("Statistics")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Diary.Domain.Entities.NotificationEntity", b =>
