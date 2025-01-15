@@ -8,8 +8,7 @@ public class DiaryUserConfiguration : IEntityTypeConfiguration<DiaryUserEntity>
 {
     public void Configure(EntityTypeBuilder<DiaryUserEntity> builder)
     {
-        builder.HasKey(e => e.DiaryUserId);
-        builder.Property(u => u.DiaryUserId).IsRequired().HasMaxLength(32);
+        builder.HasKey(e => e.Id);
         
         builder.OwnsOne(u => u.Statistics, statistics =>
         {

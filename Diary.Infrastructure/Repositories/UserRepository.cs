@@ -47,7 +47,7 @@ public class UserRepository : IUserRepository
 
     public async Task<DiaryUserEntity> GetUserById(string diaryUserId, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.DiaryUserId == diaryUserId, cancellationToken: cancellationToken);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == diaryUserId, cancellationToken: cancellationToken);
 
         return user ?? new();
     }
