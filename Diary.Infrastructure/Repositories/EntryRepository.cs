@@ -7,39 +7,44 @@ using Persistence;
 
 public class EntryRepository : IEntryRepository
 {
-    public readonly DiaryDbContext _dbContext;
+    private readonly DiaryDbContext _dbContext;
 
     public EntryRepository(DiaryDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(Entry entry, CancellationToken cancellationToken)
+    public async Task AddAsync(EntryEntity entryEntity, CancellationToken cancellationToken)
     {
-        await _dbContext.Entries.AddAsync(entry, cancellationToken);
+        await _dbContext.Entries.AddAsync(entryEntity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Entry?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<EntryEntity?> GetByEntryIdAsync(Guid entryId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Entries
-            .FirstOrDefaultAsync(entry => entry.Id == id, cancellationToken);
+        return await _dbContext.Entries.FirstOrDefaultAsync(entry => entry.Id == entryId, cancellationToken);
     }
 
-    public async Task<IEnumerable<Entry>> GetAllAsync(DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<EntryEntity?> GetAllEntriesForUserAsync(string diaryUserId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Entries.Where(e => e.Date >= from && e.Date <= to).ToListAsync(cancellationToken);
+        return await _dbContext.Entries.FirstOrDefaultAsync(entry => entry.UserId == diaryUserId, cancellationToken);
     }
 
-    public async Task UpdateAsync(Entry entry, CancellationToken cancellationToken)
+    public async Task<IEnumerable<EntryEntity>> GetByDateRangeAsync(string diaryUserId, DateTime from, DateTime to, CancellationToken cancellationToken)
     {
-        _dbContext.Entries.Update(entry);
+        return await _dbContext.Entries.Where(e => e.UserId == diaryUserId && e.Date >= from && e.Date <= to)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(EntryEntity entryEntity, CancellationToken cancellationToken)
+    {
+        _dbContext.Entries.Update(entryEntity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entry = await GetByIdAsync(id, cancellationToken);
+        var entry = await GetByEntryIdAsync(id, cancellationToken);
         if (entry != null)
         {
             _dbContext.Entries.Remove(entry);

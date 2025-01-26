@@ -1,11 +1,15 @@
 namespace Diary.Api.Controllers;
 
-using Application.Handlers;
+using System.Security.Claims;
+using Application.Handlers.Entries;
 using Application.Queries;
+using Application.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class EntriesController : ControllerBase
 {
@@ -19,11 +23,22 @@ public class EntriesController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create(CreateEntryCommand command)
     {
-        var id = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetById), new { id }, id);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        command.UserId = userId ?? command.UserId;
+        
+        var (id, badgesAwarded) = await _mediator.Send(command);
+        
+        var response = new CreateEntryResponse
+        {
+            Id = id,
+            BadgesAwarded = badgesAwarded
+        };
+        
+        return CreatedAtAction(nameof(GetById), new { id }, response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var entry = await _mediator.Send(new GetEntryByIdQuery(id));
@@ -33,11 +48,15 @@ public class EntriesController : ControllerBase
     [HttpPost("search")]
     public async Task<IActionResult> Get([FromBody] GetEntriesQuery query)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        query.UserId = userId ?? query.UserId;
+        
         var entries = await _mediator.Send(query);
         return Ok(entries);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, UpdateEntryCommand command)
     {
         if (id == Guid.Empty) return BadRequest();
@@ -46,7 +65,7 @@ public class EntriesController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         if (id == Guid.Empty) return BadRequest();

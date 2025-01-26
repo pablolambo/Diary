@@ -4,9 +4,9 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class EntryConfiguration : IEntityTypeConfiguration<Entry>
+public class EntryConfiguration : IEntityTypeConfiguration<EntryEntity>
 {
-    public void Configure(EntityTypeBuilder<Entry> builder)
+    public void Configure(EntityTypeBuilder<EntryEntity> builder)
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Title).IsRequired().HasMaxLength(200);
