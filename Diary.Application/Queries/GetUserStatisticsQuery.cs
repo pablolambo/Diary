@@ -24,7 +24,3 @@ public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQu
         return userStatisticsDto;
     }
 }
-
-// TODO:
-// 1. fix user id
-// 2. verify user statistics.
