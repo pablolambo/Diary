@@ -30,6 +30,16 @@ public class UserRepository : IUserRepository
         return users;
     }
 
+    public async Task<List<ThemeEntity>> GetUserUnlockedThemes(string diaryUserId, CancellationToken cancellationToken)
+    {
+        var unlockedThemes = await _dbContext.Users
+            .Where(u => u.Id == diaryUserId)
+            .Select(u => u.UnlockedThemes)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return unlockedThemes ?? new List<ThemeEntity>();
+    }
+
     public async Task<UserStatisticsEntity> GetUserStatistics(string diaryUserId, CancellationToken cancellationToken)
     {
         var user = await GetUserById(diaryUserId, cancellationToken);

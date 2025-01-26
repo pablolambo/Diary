@@ -4,9 +4,9 @@ using Domain.Interfaces;
 using DTOs;
 using MediatR;
 
-public sealed record GetUserStatisticsQuery(string UserId) : IRequest<UserStatistics>;
+public sealed record GetUserStatisticsQuery(string UserId) : IRequest<UserStatisticsDto>;
 
-public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQuery, UserStatistics>
+public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQuery, UserStatisticsDto>
 {
     private readonly IUserRepository _userRepository;
 
@@ -15,11 +15,11 @@ public class GetUserStatisticsQueryHandler : IRequestHandler<GetUserStatisticsQu
         _userRepository = userRepository;
     }
 
-    public async Task<UserStatistics> Handle(GetUserStatisticsQuery request, CancellationToken cancellationToken)
+    public async Task<UserStatisticsDto> Handle(GetUserStatisticsQuery request, CancellationToken cancellationToken)
     {
         var statisticsEntity = await _userRepository.GetUserStatistics(request.UserId, cancellationToken);
 
-        var userStatisticsDto = UserStatistics.ToDto(statisticsEntity);
+        var userStatisticsDto = UserStatisticsDto.ToDto(statisticsEntity);
 
         return userStatisticsDto;
     }

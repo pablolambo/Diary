@@ -26,6 +26,5 @@ public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Gui
         await _repository.UpdateAsync(entry, cancellationToken);
 
         return entry.Id;
-
     }
 }

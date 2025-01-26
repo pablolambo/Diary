@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 
 public class DiaryUserEntity : IdentityUser
 {
-    public bool IsDailyReminderEnabled { get; init; } = false;
-    public string DiaryUserId { get; init; } = string.Empty;
-    public List<NotificationEntity> Notifications { get; set; } = new();
+    public bool IsDailyReminderEnabled { get; init; }
     public UserStatisticsEntity Statistics { get; set; } = new();
+    public List<ThemeEntity> UnlockedThemes { get; set; } = new();
+    public List<BadgeEntity> UnlockedBadges { get; set; } = new();
 }

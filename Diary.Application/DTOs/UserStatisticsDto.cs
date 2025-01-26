@@ -2,7 +2,7 @@ namespace Diary.Application.DTOs;
 
 using Domain.Entities;
 
-public class UserStatistics
+public class UserStatisticsDto
 { 
     public int TotalEntries { get; set; }
     public DateTime? FirstEntryDate { get; set; }
@@ -11,10 +11,11 @@ public class UserStatistics
     public double AverageEntriesPerWeek { get; set; }
     public int FavoriteEntries { get; set; }
     public List<string> MostUsedTags { get; set; } = new();
+    public int Points { get; set; }
 
-    public static UserStatistics ToDto(UserStatisticsEntity s)
+    public static UserStatisticsDto ToDto(UserStatisticsEntity s)
     {
-        return new UserStatistics
+        return new UserStatisticsDto
         {
             FavoriteEntries = s.FavoriteEntries,
             TotalEntries = s.TotalEntries,
@@ -22,7 +23,8 @@ public class UserStatistics
             LastEntryDate = s.LastEntryDate,
             LongestStreakDay = s.CurrentDayStreak,
             MostUsedTags = s.MostUsedTags,
-            AverageEntriesPerWeek = s.AverageEntriesPerWeek
+            AverageEntriesPerWeek = s.AverageEntriesPerWeek,
+            Points = s.Points
         };
     }
 }

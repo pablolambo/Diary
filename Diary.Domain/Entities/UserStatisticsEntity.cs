@@ -9,4 +9,5 @@ public class UserStatisticsEntity
     public double AverageEntriesPerWeek { get; set; }
     public int FavoriteEntries { get; set; }
     public List<string> MostUsedTags { get; set; } = new();
+    public int Points { get; set; }
 }

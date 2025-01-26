@@ -4,10 +4,8 @@ using Diary.Api.Filters;
 using Diary.Application;
 using Diary.Domain.Entities;
 using Diary.Domain.Interfaces;
-using Diary.Domain.Services;
 using Diary.Infrastructure.Persistence;
 using Diary.Infrastructure.Repositories;
-using Diary.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -17,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
+builder.Services.AddScoped<IThemesRepository, ThemesRepository>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddDbContext<DiaryDbContext>(options => options
