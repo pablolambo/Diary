@@ -2,8 +2,12 @@
 
 public class NotificationService
 {
-    // TODO: Notifications.
+    // TODO: 
     // TODO: Tests.
+    // Notifications
     // Add tag
     // Favourite entry
+    // 1. Tags controller
+    // 2. Add default tag when creating Entry
+    // 3. Add badges
 }

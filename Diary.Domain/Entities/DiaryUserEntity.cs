@@ -8,4 +8,5 @@ public class DiaryUserEntity : IdentityUser
     public UserStatisticsEntity Statistics { get; set; } = new();
     public List<ThemeEntity> UnlockedThemes { get; set; } = new();
     public List<BadgeEntity> UnlockedBadges { get; set; } = new();
+    public List<EntryTagEntity> EntryTags { get; set; } = new();
 }

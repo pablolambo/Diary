@@ -9,6 +9,8 @@ public sealed record EntryEntity
     public DateTime Date { get; init; } = DateTime.UtcNow;
     public string? Title { get; set; }
     public string? Content { get; set; }
+    public List<TagEntity> EntryTags { get; set; } = new();
+
 
     public EntryEntity() { }
     
