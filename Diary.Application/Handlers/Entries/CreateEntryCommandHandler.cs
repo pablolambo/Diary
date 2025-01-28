@@ -40,33 +40,18 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
 
     public async Task<(Guid, List<BadgeEntity>)> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
     {
-        var userTags = await _tagsRepository.SearchByTagNames(request.TagNames!, request.UserId!, cancellationToken);
+        var newEntryId = Guid.NewGuid();
+        var (newUserTags, oldTags) = await ResolveTags(request, newEntryId, cancellationToken);
+        oldTags.AddRange(newUserTags);
 
-        var newTags = request.TagNames!.Except(userTags.Select(t => t.Name)).ToList();
-
-        var newTagEntities = new List<TagEntity>();
-        if (newTags.Count != 0)
-        {
-            newTagEntities = newTags.Select(tagName => new TagEntity
-            {
-                Id = Guid.NewGuid(),
-                UserId = request.UserId!,
-                Name = tagName
-            }).ToList();
-            
-            await _tagsRepository.UpdateTags(newTagEntities, cancellationToken);
-        }
-        
-        userTags.AddRange(newTagEntities);
-        
         var entry = new EntryEntity
         {
             Title = request.Title,
             Content = request.Content,
             Date = DateTime.UtcNow,
-            Id = Guid.NewGuid(),
+            Id = newEntryId,
             UserId = request.UserId!,
-            EntryTags = userTags
+            EntryTags = oldTags
         };
 
         await _entryRepository.AddAsync(entry, cancellationToken);
@@ -89,5 +74,26 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
         await _userRepository.UpdateUser(user, cancellationToken);
         
         return (entry.Id, badgesAwarded);
+    }
+
+    private async Task<(List<TagEntity> newTags, List<TagEntity> oldTags)> ResolveTags(CreateEntryCommand request, Guid newEntryId, CancellationToken cancellationToken)
+    {
+        var userTags = await _tagsRepository.SearchByTagNames(request.TagNames!, request.UserId!, cancellationToken);
+
+        var newTags = request.TagNames!.Except(userTags.Select(t => t.Name)).ToList();
+
+        var newTagEntities = new List<TagEntity>();
+        if (newTags.Count != 0)
+        {
+            newTagEntities = newTags.Select(tagName => new TagEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = request.UserId!,
+                Name = tagName,
+                EntryEntityId = newEntryId
+            }).ToList();
+        }
+        
+        return (newTagEntities, userTags);
     }
 }

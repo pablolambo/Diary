@@ -22,17 +22,18 @@ public class EntryRepository : IEntryRepository
 
     public async Task<EntryEntity?> GetByEntryIdAsync(Guid entryId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Entries.FirstOrDefaultAsync(entry => entry.Id == entryId, cancellationToken);
+        return await _dbContext.Entries.Include(e => e.EntryTags).FirstOrDefaultAsync(entry => entry.Id == entryId, cancellationToken);
     }
 
     public async Task<EntryEntity?> GetAllEntriesForUserAsync(string diaryUserId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Entries.FirstOrDefaultAsync(entry => entry.UserId == diaryUserId, cancellationToken);
+        return await _dbContext.Entries.Include(e => e.EntryTags).FirstOrDefaultAsync(entry => entry.UserId == diaryUserId, cancellationToken);
     }
 
     public async Task<IEnumerable<EntryEntity>> GetByDateRangeAsync(string diaryUserId, DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         return await _dbContext.Entries.Where(e => e.UserId == diaryUserId && e.Date >= from && e.Date <= to)
+            .Include(e => e.EntryTags)
             .ToListAsync(cancellationToken);
     }
 

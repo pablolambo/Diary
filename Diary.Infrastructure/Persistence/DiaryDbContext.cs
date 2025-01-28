@@ -16,7 +16,6 @@ public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : Identity
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DiaryDbContext).Assembly);
         
-        modelBuilder.ApplyConfiguration(new EntryTagEntityConfiguration());
         modelBuilder.ApplyConfiguration(new DiaryUserConfiguration());
         modelBuilder.ApplyConfiguration(new EntryConfiguration());
         modelBuilder.ApplyConfiguration(new TagEntityConfiguration());

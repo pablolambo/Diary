@@ -15,6 +15,7 @@ public class TagsRepository : ITagsRepository
     }
     public async Task<List<TagEntity>> SearchByTagNames(List<string> tagNames, string userId, CancellationToken cancellationToken)
     {
+        // TODO: Fix
         var lowercaseTagNames = tagNames.Select(t => t.ToLower()).ToList();
         
         var existingTags = await _context.Tags
@@ -24,15 +25,16 @@ public class TagsRepository : ITagsRepository
         return existingTags;
     }
 
-    public async Task UpdateTag(TagEntity tagEntity, CancellationToken cancellationToken)
+    public async Task AddTag(TagEntity tagEntity, CancellationToken cancellationToken)
     {
-        _context.Tags.Update(tagEntity);
+        //_context.Tags.Update(tagEntity);
+        await _context.Tags.AddAsync(tagEntity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateTags(List<TagEntity> tagEntity, CancellationToken cancellationToken)
+    public async Task AddTags(List<TagEntity> tagEntities, CancellationToken cancellationToken)
     {
-        _context.Tags.UpdateRange(tagEntity);
+        await _context.Tags.AddRangeAsync(tagEntities, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);    
     }
 }

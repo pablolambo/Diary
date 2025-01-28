@@ -10,4 +10,6 @@ public class NotificationService
     // 1. Tags controller
     // 2. Add default tag when creating Entry
     // 3. Add badges
+    
+    // unlockedBadges[] doesnt work in users me and entryTags[]
 }
