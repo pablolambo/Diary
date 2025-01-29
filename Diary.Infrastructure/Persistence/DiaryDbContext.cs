@@ -1,5 +1,6 @@
 ﻿namespace Diary.Infrastructure.Persistence;
 
+using Configurations;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,10 +10,15 @@ public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : Identity
     public DbSet<EntryEntity> Entries { get; set; }
     public DbSet<ThemeEntity> Themes { get; set; }
     public DbSet<BadgeEntity> Badges { get; set; }
+    public DbSet<TagEntity> Tags { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DiaryDbContext).Assembly);
+        
+        modelBuilder.ApplyConfiguration(new DiaryUserConfiguration());
+        modelBuilder.ApplyConfiguration(new EntryConfiguration());
+        modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
         
         modelBuilder.Entity<ThemeEntity>().HasKey(t => t.Id);
         

@@ -46,11 +46,14 @@ public class BadgesTests
 
         var badgesAwarded = await _badgesUtilities.UserBadgesAwarded(user, CancellationToken.None);
 
-        Assert.NotNull(badgesAwarded);
-        Assert.That(badgesAwarded.Count, Is.EqualTo(2));
-        _userRepositoryMock.Verify(repo => repo.UpdateUser(It.IsAny<DiaryUserEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));   
-        Assert.That(badgesAwarded[0].Name, Is.EqualTo("Your first entry"));
-        Assert.That(badgesAwarded[1].Name, Is.EqualTo("10 total entries"));
+        Assert.That(badgesAwarded, Is.Not.Null);
+        Assert.That(badgesAwarded, Has.Count.EqualTo(2));
+        _userRepositoryMock.Verify(repo => repo.UpdateUser(It.IsAny<DiaryUserEntity>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        Assert.Multiple(() =>
+        {
+            Assert.That(badgesAwarded[0].Name, Is.EqualTo("Your first entry"));
+            Assert.That(badgesAwarded[1].Name, Is.EqualTo("10 total entries"));
+        });
     }
 
     [Test]
@@ -62,10 +65,10 @@ public class BadgesTests
             TotalEntries = 1
         };
         
-        var userStatisticsResult = _userStatisticsUtilities.UpdateCurrentDayStreak(userStatistics);
+        var userStatisticsResult = UserStatisticsUtilities.UpdateCurrentDayStreak(userStatistics);
         
-        Assert.NotNull(userStatisticsResult);
-        Assert.AreEqual(userStatisticsResult.CurrentDayStreak, 1);
+        Assert.That(userStatisticsResult, Is.Not.Null);
+        Assert.That(userStatisticsResult.CurrentDayStreak, Is.EqualTo(1));
     }
     
     [Test]
@@ -75,14 +78,14 @@ public class BadgesTests
         {
             CurrentDayStreak = 1,
             TotalEntries = 2,
-            LastEntryDate = DateTime.UtcNow.Date,
-            FirstEntryDate = DateTime.UtcNow.Date.AddDays(-1)
+            LastEntryDate = DateTime.UtcNow.Date.AddDays(-1),
+            FirstEntryDate = DateTime.UtcNow.Date.AddDays(-2)
         };
         
-        var userStatisticsResult = _userStatisticsUtilities.UpdateCurrentDayStreak(userStatistics);
+        var userStatisticsResult = UserStatisticsUtilities.UpdateCurrentDayStreak(userStatistics);
         
-        Assert.NotNull(userStatisticsResult);
-        Assert.AreEqual(userStatisticsResult.CurrentDayStreak, 2);
+        Assert.That(userStatisticsResult, Is.Not.Null);
+        Assert.That(userStatisticsResult.CurrentDayStreak, Is.EqualTo(2));
     }
 
     private static List<BadgeEntity> CreateBadges()

@@ -38,4 +38,17 @@ public class ThemeController : ControllerBase
 
         return Ok(themes);
     }
+    
+    [HttpGet("set/{themeId:guid}")]
+    public async Task<IActionResult> SetTheme([FromRoute] Guid themeId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+        
+        var theme = await _mediator.Send(new GetThemeQuery(userId, themeId));
+
+        return Ok(theme);
+    }
 }

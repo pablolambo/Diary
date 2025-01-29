@@ -55,6 +55,18 @@ public class EntriesController : ControllerBase
         var entries = await _mediator.Send(query);
         return Ok(entries);
     }
+    
+    [HttpPost("favourite/{id:guid}")]
+    public async Task<IActionResult> ChangeFavouriteStatus([FromRoute] Guid id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+     
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+        
+        var entries = await _mediator.Send(new FavouriteEntryCommand(id, userId));
+        return Ok(entries);
+    }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, UpdateEntryCommand command)

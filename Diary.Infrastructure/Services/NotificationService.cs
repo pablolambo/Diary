@@ -2,8 +2,6 @@
 
 public class NotificationService
 {
-    // TODO: Notifications.
-    // TODO: Tests.
-    // Add tag
-    // Favourite entry
+    // TODO:
+    // 1. set theme.
 }

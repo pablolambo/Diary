@@ -4,7 +4,7 @@ using Domain.Entities;
 
 public class UserStatisticsUtilities
 {
-    public UserStatisticsEntity UpdateCurrentDayStreak(UserStatisticsEntity userStats)
+    public static UserStatisticsEntity UpdateCurrentDayStreak(UserStatisticsEntity userStats)
     {
         if (userStats.LastEntryDate.HasValue && userStats.FirstEntryDate.HasValue)
         {
@@ -21,6 +21,22 @@ public class UserStatisticsUtilities
         else
         {
             userStats.CurrentDayStreak = 1;
+        }
+
+        return userStats;
+    }
+
+    public static UserStatisticsEntity UpdateAverageEntriesPerWeek(UserStatisticsEntity userStats)
+    {
+        if (userStats.TotalEntries == 0 || !userStats.FirstEntryDate.HasValue || !userStats.LastEntryDate.HasValue)
+        {
+            userStats.AverageEntriesPerWeek = 0;
+        }
+        else
+        {
+            var daysDifference = (userStats.LastEntryDate.Value - userStats.FirstEntryDate.Value).TotalDays;
+            var weeks = daysDifference / 7;
+            userStats.AverageEntriesPerWeek = userStats.TotalEntries / weeks;
         }
 
         return userStats;

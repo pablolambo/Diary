@@ -8,7 +8,10 @@ public sealed record EntryEntity
     public string UserId { get; init; }
     public DateTime Date { get; init; } = DateTime.UtcNow;
     public string? Title { get; set; }
+    public bool IsFavourite { get; set; }
     public string? Content { get; set; }
+    public List<TagEntity> EntryTags { get; set; } = new();
+
 
     public EntryEntity() { }
     

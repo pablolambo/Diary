@@ -4,6 +4,7 @@ using Diary.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diary.Infrastructure.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250128214441_Tags")]
+    partial class Tags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,49 +54,49 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8efc09da-282b-4e75-ae0c-b1abde72a384"),
+                            Id = new Guid("33d07c3e-33bf-40bc-8e42-b6a0cd157670"),
                             Name = "Your first entry",
                             Type = 1,
                             Value = 1
                         },
                         new
                         {
-                            Id = new Guid("14dfeba8-15f5-458f-8ebf-b9e43a2ad4e4"),
+                            Id = new Guid("174794e2-3f31-4d81-a989-4479c8adf4fb"),
                             Name = "3 day streak",
                             Type = 0,
                             Value = 3
                         },
                         new
                         {
-                            Id = new Guid("ac8e7565-3ee9-483b-a811-72b0165dcd8e"),
+                            Id = new Guid("9b1ebbaa-9c35-4c60-90c8-74b366926797"),
                             Name = "5 day streak",
                             Type = 0,
                             Value = 5
                         },
                         new
                         {
-                            Id = new Guid("b3c46cdf-4cc3-451c-9a99-859f0ab3587f"),
+                            Id = new Guid("a6e6a2b2-80a8-497b-9b39-e0343abdcb6e"),
                             Name = "7 day streak",
                             Type = 0,
                             Value = 7
                         },
                         new
                         {
-                            Id = new Guid("a48a4dd1-9a62-4ea6-8b03-0896b6bcc600"),
+                            Id = new Guid("4e5d6858-d2a1-473d-90ec-a99ab259af0d"),
                             Name = "10 total entries",
                             Type = 1,
                             Value = 10
                         },
                         new
                         {
-                            Id = new Guid("02d6d0df-ed43-4644-8681-8b937742e0c5"),
+                            Id = new Guid("4c923c59-1990-4f56-a735-81c8d956e343"),
                             Name = "25 total entries",
                             Type = 1,
                             Value = 25
                         },
                         new
                         {
-                            Id = new Guid("337a81ee-4616-4d16-ad99-a5f1423e12bd"),
+                            Id = new Guid("149d6f49-6fd4-4011-ac25-16023a87fd51"),
                             Name = "50 total entries",
                             Type = 1,
                             Value = 50
@@ -198,7 +201,7 @@ namespace Diary.Infrastructure.Migrations
                     b.ToTable("Entries");
                 });
 
-            modelBuilder.Entity("Diary.Domain.Entities.TagEntity", b =>
+            modelBuilder.Entity("Diary.Domain.Entities.EntryTagEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,7 +210,25 @@ namespace Diary.Infrastructure.Migrations
                     b.Property<string>("DiaryUserEntityId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("EntryEntityId")
+                    b.Property<Guid>("EntryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiaryUserEntityId");
+
+                    b.HasIndex("EntryId");
+
+                    b.ToTable("EntryTagEntity");
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.TagEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EntryEntityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -215,15 +236,18 @@ namespace Diary.Infrastructure.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<Guid?>("TagEntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DiaryUserEntityId");
-
                     b.HasIndex("EntryEntityId");
+
+                    b.HasIndex("TagEntityId");
 
                     b.HasIndex("UserId", "Name")
                         .IsUnique();
@@ -243,12 +267,6 @@ namespace Diary.Infrastructure.Migrations
                     b.Property<string>("DiaryUserEntityId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsBought")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PrimaryColor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -266,28 +284,22 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("655e93c8-7e1d-465b-a4ca-813348750879"),
+                            Id = new Guid("b067f9c2-0f49-4616-ae7d-035a5bfd0ae5"),
                             Cost = 100,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Blue",
                             SecondaryColor = "LightBlue"
                         },
                         new
                         {
-                            Id = new Guid("4383b26a-0442-4728-b0b5-1ff089c5bfb4"),
+                            Id = new Guid("0a3ade2b-dee9-4730-b933-0a8f192f3722"),
                             Cost = 250,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Red",
                             SecondaryColor = "DarkRed"
                         },
                         new
                         {
-                            Id = new Guid("ad0146b0-9324-462e-9906-3bf4f7f56027"),
+                            Id = new Guid("a1dc0df9-8757-4474-8cb9-efeb13130136"),
                             Cost = 500,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Green",
                             SecondaryColor = "DarkGreen"
                         });
@@ -477,19 +489,30 @@ namespace Diary.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Diary.Domain.Entities.TagEntity", b =>
+            modelBuilder.Entity("Diary.Domain.Entities.EntryTagEntity", b =>
                 {
                     b.HasOne("Diary.Domain.Entities.DiaryUserEntity", null)
                         .WithMany("EntryTags")
                         .HasForeignKey("DiaryUserEntityId");
 
-                    b.HasOne("Diary.Domain.Entities.EntryEntity", "EntryEntity")
-                        .WithMany("EntryTags")
-                        .HasForeignKey("EntryEntityId")
+                    b.HasOne("Diary.Domain.Entities.EntryEntity", "Entry")
+                        .WithMany()
+                        .HasForeignKey("EntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EntryEntity");
+                    b.Navigation("Entry");
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.TagEntity", b =>
+                {
+                    b.HasOne("Diary.Domain.Entities.EntryEntity", null)
+                        .WithMany("EntryTags")
+                        .HasForeignKey("EntryEntityId");
+
+                    b.HasOne("Diary.Domain.Entities.TagEntity", null)
+                        .WithMany("EntryTags")
+                        .HasForeignKey("TagEntityId");
                 });
 
             modelBuilder.Entity("Diary.Domain.Entities.ThemeEntity", b =>
@@ -560,6 +583,11 @@ namespace Diary.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Diary.Domain.Entities.EntryEntity", b =>
+                {
+                    b.Navigation("EntryTags");
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.TagEntity", b =>
                 {
                     b.Navigation("EntryTags");
                 });

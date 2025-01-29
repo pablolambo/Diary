@@ -44,8 +44,8 @@ public class BuyThemeCommandHandler : IRequestHandler<BuyThemeCommand, Unit>
         }
         
         user.Statistics.Points -= themeToBuy.Cost;
+        themeToBuy.IsBought = true;
         user.UnlockedThemes.Add(themeToBuy);
-        
         await _userRepository.UpdateUser(user, cancellationToken);
         
         return Unit.Value;

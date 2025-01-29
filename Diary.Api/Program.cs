@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using System.Text.Json.Serialization;
 using Diary.Api.Extensions;
 using Diary.Api.Filters;
 using Diary.Application;
@@ -17,6 +17,7 @@ builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 builder.Services.AddScoped<IThemesRepository, ThemesRepository>();
+builder.Services.AddScoped<ITagsRepository, TagsRepository>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddDbContext<DiaryDbContext>(options => options
@@ -31,7 +32,11 @@ builder.Services.AddIdentityCore<DiaryUserEntity>()
     .AddEntityFrameworkStores<DiaryDbContext>()
     .AddApiEndpoints();
     
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -59,13 +64,6 @@ if (app.Environment.IsDevelopment())
     
     app.ApplyMigrations();
 }
-
-app.MapGet("users/me", async (ClaimsPrincipal claims, DiaryDbContext context) =>
-{
-    var userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-
-    return await context.Users.FindAsync(userId);
-}).RequireAuthorization();
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<DiaryUserEntity>();
