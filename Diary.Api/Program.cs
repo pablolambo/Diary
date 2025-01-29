@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Text.Json.Serialization;
 using Diary.Api.Extensions;
 using Diary.Api.Filters;
@@ -65,13 +64,6 @@ if (app.Environment.IsDevelopment())
     
     app.ApplyMigrations();
 }
-
-app.MapGet("users/me", async (ClaimsPrincipal claims, DiaryDbContext context) =>
-{
-    var userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-
-    return await context.Users.FindAsync(userId);
-}).RequireAuthorization();
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<DiaryUserEntity>();

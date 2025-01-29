@@ -6,4 +6,6 @@ public class ThemeEntity
     public string PrimaryColor { get; set; } = string.Empty;
     public string SecondaryColor { get; set; } = string.Empty;
     public int Cost { get; set; }
+    public bool IsSelected { get; set; }
+    public bool IsBought { get; set; }
 }

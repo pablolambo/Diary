@@ -28,4 +28,16 @@ public class UserController  : ControllerBase
         var stats = await _mediator.Send(new GetUserStatisticsQuery(userId));
         return Ok(stats);
     }
+    
+    [HttpGet("me")]
+    public async Task<IActionResult> UserInfo()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+        
+        var user = await _mediator.Send(new GetUserInfoQuery(userId));
+        return Ok(user);
+    }
 }

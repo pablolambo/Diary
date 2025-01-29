@@ -20,4 +20,9 @@ public class ThemesRepository : IThemesRepository
         
         return themes;
     }
+
+    public async Task<ThemeEntity?> GetThemeByIdAsync(Guid themeId, CancellationToken cancellationToken)
+    {
+        return await _context.Themes.FirstOrDefaultAsync(t => t.Id == themeId, cancellationToken);
+    }
 }

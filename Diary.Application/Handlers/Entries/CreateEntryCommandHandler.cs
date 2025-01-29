@@ -42,7 +42,7 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
     {
         var newEntryId = Guid.NewGuid();
         var (newUserTags, oldTags) = await ResolveTags(request, newEntryId, cancellationToken);
-        oldTags.AddRange(newUserTags);
+        var tagsCombined = new List<TagEntity>(oldTags.Concat(newUserTags));
 
         var entry = new EntryEntity
         {
@@ -51,25 +51,28 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
             Date = DateTime.UtcNow,
             Id = newEntryId,
             UserId = request.UserId!,
-            EntryTags = oldTags
+            EntryTags = tagsCombined
         };
 
         await _entryRepository.AddAsync(entry, cancellationToken);
         var user = await _userRepository.GetUserById(request.UserId!, cancellationToken);
-        var userStats = user.Statistics;
 
-        userStats.TotalEntries++;
-        if (userStats.TotalEntries == 1)
+        user.Statistics.TotalEntries++;
+        if (user.Statistics.TotalEntries == 1)
         {
-            userStats.FirstEntryDate = DateTime.UtcNow;
+            user.Statistics.FirstEntryDate = DateTime.UtcNow;
         }
-
-        userStats.LastEntryDate = DateTime.UtcNow;
-        userStats = _userStatisticsUtilities.UpdateCurrentDayStreak(userStats);
-
+        
+        user.EntryTags.AddRange(newUserTags);
+        
+        user.Statistics = UserStatisticsUtilities.UpdateCurrentDayStreak(user.Statistics);
+        user.Statistics.LastEntryDate = DateTime.UtcNow;
+        
+        user.Statistics = UserStatisticsUtilities.UpdateAverageEntriesPerWeek(user.Statistics);
+        
         var badgesAwarded = await _badgesUtilities.UserBadgesAwarded(user, cancellationToken);
 
-        userStats.Points += 25;
+        user.Statistics.Points += 25;
         
         await _userRepository.UpdateUser(user, cancellationToken);
         

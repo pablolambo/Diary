@@ -4,6 +4,7 @@ using Diary.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diary.Infrastructure.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250129165614_UpdateIdk")]
+    partial class UpdateIdk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,49 +54,49 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8efc09da-282b-4e75-ae0c-b1abde72a384"),
+                            Id = new Guid("cf268114-d173-4761-8fb2-1bb6ad860c97"),
                             Name = "Your first entry",
                             Type = 1,
                             Value = 1
                         },
                         new
                         {
-                            Id = new Guid("14dfeba8-15f5-458f-8ebf-b9e43a2ad4e4"),
+                            Id = new Guid("8755bd23-87f8-4e7c-bbf0-864671089008"),
                             Name = "3 day streak",
                             Type = 0,
                             Value = 3
                         },
                         new
                         {
-                            Id = new Guid("ac8e7565-3ee9-483b-a811-72b0165dcd8e"),
+                            Id = new Guid("db8391a8-a723-42d2-b7ac-b7a785fc57dd"),
                             Name = "5 day streak",
                             Type = 0,
                             Value = 5
                         },
                         new
                         {
-                            Id = new Guid("b3c46cdf-4cc3-451c-9a99-859f0ab3587f"),
+                            Id = new Guid("2cf02038-f42e-45dd-b215-5482196ad84b"),
                             Name = "7 day streak",
                             Type = 0,
                             Value = 7
                         },
                         new
                         {
-                            Id = new Guid("a48a4dd1-9a62-4ea6-8b03-0896b6bcc600"),
+                            Id = new Guid("b95a1705-6f1a-4dd3-a708-8d002d8f2621"),
                             Name = "10 total entries",
                             Type = 1,
                             Value = 10
                         },
                         new
                         {
-                            Id = new Guid("02d6d0df-ed43-4644-8681-8b937742e0c5"),
+                            Id = new Guid("d24c51b7-e323-4330-8577-0a7dd87d069e"),
                             Name = "25 total entries",
                             Type = 1,
                             Value = 25
                         },
                         new
                         {
-                            Id = new Guid("337a81ee-4616-4d16-ad99-a5f1423e12bd"),
+                            Id = new Guid("99ccca80-53ee-4d6c-baae-6e3ada283761"),
                             Name = "50 total entries",
                             Type = 1,
                             Value = 50
@@ -243,12 +246,6 @@ namespace Diary.Infrastructure.Migrations
                     b.Property<string>("DiaryUserEntityId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsBought")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PrimaryColor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -266,28 +263,22 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("655e93c8-7e1d-465b-a4ca-813348750879"),
+                            Id = new Guid("d44aed49-1933-4739-ad05-c41d97bf0b6d"),
                             Cost = 100,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Blue",
                             SecondaryColor = "LightBlue"
                         },
                         new
                         {
-                            Id = new Guid("4383b26a-0442-4728-b0b5-1ff089c5bfb4"),
+                            Id = new Guid("03dd3d04-9bbb-42d4-81c5-5bb72ba55882"),
                             Cost = 250,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Red",
                             SecondaryColor = "DarkRed"
                         },
                         new
                         {
-                            Id = new Guid("ad0146b0-9324-462e-9906-3bf4f7f56027"),
+                            Id = new Guid("a41a15d8-0e6e-46dc-943c-3bce03c3f971"),
                             Cost = 500,
-                            IsBought = false,
-                            IsSelected = false,
                             PrimaryColor = "Green",
                             SecondaryColor = "DarkGreen"
                         });
