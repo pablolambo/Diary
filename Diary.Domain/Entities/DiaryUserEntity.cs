@@ -9,4 +9,5 @@ public class DiaryUserEntity : IdentityUser
     public List<ThemeEntity> UnlockedThemes { get; set; } = new();
     public List<BadgeEntity> UnlockedBadges { get; set; } = new();
     public List<TagEntity> EntryTags { get; set; } = new();
+    public string FirebaseToken { get; set; }
 }

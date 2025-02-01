@@ -1,6 +1,7 @@
 ﻿namespace Diary.Api.Controllers;
 
 using System.Security.Claims;
+using Application.Handlers.Users;
 using Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -39,5 +40,16 @@ public class UserController  : ControllerBase
         
         var user = await _mediator.Send(new GetUserInfoQuery(userId));
         return Ok(user);
+    }
+    
+    [HttpPost("push-notifications")]
+    public async Task<IActionResult> CreatePushNotificationAsync([FromBody] CreateNotificationCommand command, CancellationToken cancellationToken) 
+    {
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (result)
+            return Ok(new { message = "Notification sent successfully!" });
+    
+        return BadRequest(new { error = "Failed to send notification." });
     }
 }

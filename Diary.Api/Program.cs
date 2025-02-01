@@ -6,6 +6,9 @@ using Diary.Domain.Entities;
 using Diary.Domain.Interfaces;
 using Diary.Infrastructure.Persistence;
 using Diary.Infrastructure.Repositories;
+using Diary.Infrastructure.Services;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -18,6 +21,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 builder.Services.AddScoped<IThemesRepository, ThemesRepository>();
 builder.Services.AddScoped<ITagsRepository, TagsRepository>();
+builder.Services.AddScoped<INotificationService, FirebaseNotificationService>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddDbContext<DiaryDbContext>(options => options
@@ -64,6 +68,11 @@ if (app.Environment.IsDevelopment())
     
     app.ApplyMigrations();
 }
+
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "diaryfcm-329ad-firebase-adminsdk-fbsvc-5d23ab4a7a.json")),
+});
 
 app.UseHttpsRedirection();
 app.MapIdentityApi<DiaryUserEntity>();
