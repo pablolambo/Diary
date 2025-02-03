@@ -73,6 +73,14 @@ public class EntriesController : ControllerBase
     {
         if (id == Guid.Empty) return BadRequest();
         
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+     
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+
+        command.EntryId = id;
+        command.UserId = userId;
+        
         await _mediator.Send(command);
         return NoContent();
     }

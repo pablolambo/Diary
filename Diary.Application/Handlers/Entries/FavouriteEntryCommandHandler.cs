@@ -3,9 +3,9 @@ namespace Diary.Application.Handlers.Entries;
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record FavouriteEntryCommand(Guid Id, string UserId) : IRequest<Unit>;
+public sealed record FavouriteEntryCommand(Guid Id, string UserId) : IRequest<bool>;
 
-public class FavouriteEntryCommandHandler : IRequestHandler<FavouriteEntryCommand, Unit>
+public class FavouriteEntryCommandHandler : IRequestHandler<FavouriteEntryCommand, bool>
 {
     private readonly IEntryRepository _repository;
     private readonly IUserRepository _userRepository;
@@ -16,7 +16,7 @@ public class FavouriteEntryCommandHandler : IRequestHandler<FavouriteEntryComman
         _userRepository = userRepository;
     }
 
-    public async Task<Unit> Handle(FavouriteEntryCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(FavouriteEntryCommand request, CancellationToken cancellationToken)
     {
         var entry = await _repository.GetByEntryIdAsync(request.Id, cancellationToken);
 
@@ -38,6 +38,6 @@ public class FavouriteEntryCommandHandler : IRequestHandler<FavouriteEntryComman
         
         await _repository.UpdateAsync(entry, cancellationToken);
             
-        return Unit.Value;
+        return entry.IsFavourite;
     }
 }

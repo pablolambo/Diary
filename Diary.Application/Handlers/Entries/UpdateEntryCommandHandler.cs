@@ -4,7 +4,14 @@ using Domain.Entities;
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record UpdateEntryCommand(Guid EntryId, string Content, string Title, List<string>? TagNames, string UserId) : IRequest<Guid>;
+public class UpdateEntryCommand : IRequest<Guid>
+{
+    public Guid? EntryId { get; set; }
+    public string Content { get; set; }
+    public string Title { get; set; }
+    public List<string>? TagNames { get; set; }
+    public string? UserId { get; set; }
+}
 
 public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Guid>
 {
@@ -26,7 +33,7 @@ public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Gui
         var (newUserTags, oldTags) = await ResolveTags(request, cancellationToken);
         var tagsCombined = new List<TagEntity>(oldTags.Concat(newUserTags));
         
-        var entry = await _repository.GetByEntryIdAsync(request.EntryId, cancellationToken);
+        var entry = await _repository.GetByEntryIdAsync(request.EntryId!.Value, cancellationToken);
 
         if (entry == null) return Guid.Empty;
         
@@ -34,21 +41,21 @@ public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Gui
         entry.Title = request.Title;
         entry.EntryTags = tagsCombined;
 
-        var user = await _userRepository.GetUserById(request.UserId, cancellationToken);
+        var user = await _userRepository.GetUserById(request.UserId!, cancellationToken);
 
         if (user == null) throw new Exception($"User {request.UserId} not found");
         
         user.EntryTags.AddRange(newUserTags);
-        await _userRepository.UpdateUser(user, cancellationToken);
         
         await _repository.UpdateAsync(entry, cancellationToken);
+        await _userRepository.UpdateUser(user, cancellationToken);
 
         return entry.Id;
     }
     
     private async Task<(List<TagEntity> newTags, List<TagEntity> oldTags)> ResolveTags(UpdateEntryCommand request, CancellationToken cancellationToken)
     {
-        var userTags = await _tagsRepository.SearchByTagNames(request.TagNames!, request.UserId, cancellationToken);
+        var userTags = await _tagsRepository.SearchByTagNames(request.TagNames!, request.UserId!, cancellationToken);
 
         var newTags = request.TagNames!.Except(userTags.Select(t => t.Name)).ToList();
 
@@ -60,7 +67,7 @@ public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand, Gui
                 Id = Guid.NewGuid(),
                 UserId = request.UserId,
                 Name = tagName,
-                EntryEntityId = request.EntryId
+                EntryEntityId = request.EntryId!.Value
             }).ToList();
         }
         
