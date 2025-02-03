@@ -28,6 +28,11 @@ public class GetThemeQueryHandler : IRequestHandler<GetThemeQuery, ThemeDto>
 
         if (!isThemeUnlocked) return ThemeDto.ToDto(themeEntity);
         
+        foreach (var theme in user.UnlockedThemes)
+        {
+            theme.IsSelected = false;
+        }
+        
         themeEntity.IsSelected = true;
         user.UnlockedThemes.Add(themeEntity);
         await _userRepository.UpdateUser(user, cancellationToken);
