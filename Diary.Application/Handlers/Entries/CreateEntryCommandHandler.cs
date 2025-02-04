@@ -20,7 +20,6 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
     private readonly IEntryRepository _entryRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBadgeRepository _badgeRepository;
-    private readonly UserStatisticsUtilities _userStatisticsUtilities;
     private readonly BadgesUtilities _badgesUtilities;
     private readonly ITagsRepository _tagsRepository;
 
@@ -35,7 +34,7 @@ public class CreateEntryCommandHandler : IRequestHandler<CreateEntryCommand, (Gu
         _tagsRepository = tagsRepository;
 
         _badgesUtilities = new BadgesUtilities(_badgeRepository, _userRepository);
-        _userStatisticsUtilities = new UserStatisticsUtilities();
+        new UserStatisticsUtilities();
     }
 
     public async Task<(Guid, List<BadgeEntity>)> Handle(CreateEntryCommand request, CancellationToken cancellationToken)

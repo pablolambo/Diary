@@ -36,7 +36,7 @@ public class UserStatisticsUtilities
         {
             var daysDifference = (userStats.LastEntryDate.Value - userStats.FirstEntryDate.Value).TotalDays;
             var weeks = daysDifference / 7;
-            userStats.AverageEntriesPerWeek = userStats.TotalEntries / weeks;
+            userStats.AverageEntriesPerWeek = Math.Round(userStats.TotalEntries / weeks, 2);
         }
 
         return userStats;
