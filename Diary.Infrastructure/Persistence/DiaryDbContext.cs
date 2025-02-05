@@ -3,14 +3,15 @@
 using Configurations;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : IdentityDbContext<DiaryUserEntity>(options)
 {
     public DbSet<EntryEntity> Entries { get; set; }
-    public DbSet<ThemeEntity> Themes { get; set; }
     public DbSet<BadgeEntity> Badges { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
+    public DbSet<UserTheme> UserThemes { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -19,10 +20,6 @@ public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : Identity
         modelBuilder.ApplyConfiguration(new DiaryUserConfiguration());
         modelBuilder.ApplyConfiguration(new EntryConfiguration());
         modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
-        
-        modelBuilder.Entity<ThemeEntity>().HasKey(t => t.Id);
-        
-        SeedThemes(modelBuilder);
         
         modelBuilder.Entity<BadgeEntity>()
             .HasKey(b => b.Id);
@@ -80,33 +77,6 @@ public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : Identity
             Type = BadgeType.TotalEntries,
             Value = 50
         });
-    }
-
-    private static void SeedThemes(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ThemeEntity>().HasData(
-            new ThemeEntity
-            {
-                Id = Guid.NewGuid(),
-                PrimaryColor = "Blue",
-                SecondaryColor = "LightBlue",
-                Cost = 100
-            },
-            new ThemeEntity
-            {
-                Id = Guid.NewGuid(),
-                PrimaryColor = "Red",
-                SecondaryColor = "DarkRed",
-                Cost = 250
-            },
-            new ThemeEntity
-            {
-                Id = Guid.NewGuid(),
-                PrimaryColor = "Green",
-                SecondaryColor = "DarkGreen",
-                Cost = 500
-            }
-        );
     }
 }
 

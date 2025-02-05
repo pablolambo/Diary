@@ -34,11 +34,12 @@ public class UserStatisticsUtilities
         }
         else
         {
-            var daysDifference = (userStats.LastEntryDate.Value - userStats.FirstEntryDate.Value).TotalDays;
-            var weeks = daysDifference / 7;
+            var daysDifference = Math.Max(1, Math.Round((userStats.LastEntryDate.Value - userStats.FirstEntryDate.Value).TotalDays));
+            var weeks = Math.Round(daysDifference / 7, 2);
             userStats.AverageEntriesPerWeek = Math.Round(userStats.TotalEntries / weeks, 2);
         }
 
         return userStats;
     }
+
 }

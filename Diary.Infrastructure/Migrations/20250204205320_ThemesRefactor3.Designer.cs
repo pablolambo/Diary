@@ -4,6 +4,7 @@ using Diary.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diary.Infrastructure.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250204205320_ThemesRefactor3")]
+    partial class ThemesRefactor3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,49 +54,49 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("543f0c3c-c7eb-45bd-b603-0904b4e5ed0f"),
+                            Id = new Guid("fa756118-066d-4b08-991f-5deb025b192f"),
                             Name = "Your first entry",
                             Type = 1,
                             Value = 1
                         },
                         new
                         {
-                            Id = new Guid("cbec5904-1a92-48a5-a00a-7f5aea0ba299"),
+                            Id = new Guid("5414060d-9fe4-4c7a-b14d-9ac305986dca"),
                             Name = "3 day streak",
                             Type = 0,
                             Value = 3
                         },
                         new
                         {
-                            Id = new Guid("f107b982-878c-42cc-96b5-932d14c252b7"),
+                            Id = new Guid("be49513b-87c1-4d00-9159-8e974266bc9c"),
                             Name = "5 day streak",
                             Type = 0,
                             Value = 5
                         },
                         new
                         {
-                            Id = new Guid("52dd99c0-6a44-4996-aa07-23a7499ba33e"),
+                            Id = new Guid("b54d4a28-a762-4284-9069-5f5dedde1155"),
                             Name = "7 day streak",
                             Type = 0,
                             Value = 7
                         },
                         new
                         {
-                            Id = new Guid("9e8a6b3c-5414-462c-9a57-3517fd6917af"),
+                            Id = new Guid("46b7b0ec-0b12-485a-bc89-119f422b71fe"),
                             Name = "10 total entries",
                             Type = 1,
                             Value = 10
                         },
                         new
                         {
-                            Id = new Guid("b858c2a4-9389-4071-bc05-129141d8e97a"),
+                            Id = new Guid("8cf9bbc9-87ce-463f-801c-cba25df14bbb"),
                             Name = "25 total entries",
                             Type = 1,
                             Value = 25
                         },
                         new
                         {
-                            Id = new Guid("de35830d-d98a-42aa-b955-8c20644229c5"),
+                            Id = new Guid("a11fd9a9-704f-41b2-a637-d88763be6dde"),
                             Name = "50 total entries",
                             Type = 1,
                             Value = 50
@@ -260,15 +263,11 @@ namespace Diary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DiaryUserEntityId");
 
-                    b.ToTable("UserThemes");
+                    b.ToTable("UserTheme");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

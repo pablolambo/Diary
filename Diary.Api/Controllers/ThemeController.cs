@@ -34,7 +34,17 @@ public class ThemeController : ControllerBase
     [HttpGet("themes")]
     public async Task<IActionResult> GetThemes()
     {
-        var themes = await _mediator.Send(new GetThemesQuery());
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
+
+        var query = new GetThemesQuery
+        {
+            UserId = userId
+        };
+
+        var themes = await _mediator.Send(query);
 
         return Ok(themes);
     }
@@ -47,7 +57,7 @@ public class ThemeController : ControllerBase
         if (userId == null)
             throw new UnauthorizedAccessException("User is not authenticated.");
         
-        var theme = await _mediator.Send(new GetThemeQuery(userId, themeId));
+        var theme = await _mediator.Send(new SetThemeQuery(userId, themeId));
 
         return Ok(theme);
     }
