@@ -1,5 +1,6 @@
 ﻿namespace Diary.Application.Utilities;
 
+using System.Numerics;
 using Domain.Entities;
 
 public class UserStatisticsUtilities
@@ -36,7 +37,14 @@ public class UserStatisticsUtilities
         {
             var daysDifference = Math.Max(1, Math.Round((userStats.LastEntryDate.Value - userStats.FirstEntryDate.Value).TotalDays));
             var weeks = Math.Round(daysDifference / 7, 2);
-            userStats.AverageEntriesPerWeek = Math.Round(userStats.TotalEntries / weeks, 2);
+            if (weeks < 1)
+            {
+                userStats.AverageEntriesPerWeek = userStats.TotalEntries;
+            }
+            else
+            {
+                userStats.AverageEntriesPerWeek = Math.Round(userStats.TotalEntries / weeks, 2);
+            }
         }
 
         return userStats;
