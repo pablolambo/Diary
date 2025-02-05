@@ -3,36 +3,33 @@
 using Domain.Interfaces;
 using MediatR;
 
-public sealed record BuyThemeCommand(Guid ThemeId, string UserId) : IRequest<Unit>;
+public sealed record BuyThemeCommand(Guid themeId, string UserId) : IRequest<Unit>;
 
 public class BuyThemeCommandHandler : IRequestHandler<BuyThemeCommand, Unit>
 {
-    private readonly IThemesRepository _themesRepository;
     private readonly IUserRepository _userRepository;
 
-    public BuyThemeCommandHandler(IThemesRepository themesRepository, IUserRepository userRepository)
+    public BuyThemeCommandHandler(IUserRepository userRepository)
     {
-        _themesRepository = themesRepository;
         _userRepository = userRepository;
     }
 
     public async Task<Unit> Handle(BuyThemeCommand request, CancellationToken cancellationToken)
     {
-        var unlockedThemes = await _userRepository.GetUserUnlockedThemes(request.UserId, cancellationToken);
-        var themes = await _themesRepository.GetThemesAsync();
-        var themeToBuy = themes.FirstOrDefault(t => t.Id == request.ThemeId);
+        var user = await _userRepository.GetUserById(request.UserId, cancellationToken);
+        var themes = user.UserTheme;
+        var themeToBuy = themes.FirstOrDefault(t => t.Id == request.themeId);
 
         if (themeToBuy == null)
         {
-            throw new Exception($"Theme {request.ThemeId} not found.");
+            throw new Exception($"Theme {request.themeId} not found.");
         }
 
-        if (unlockedThemes.Contains(themeToBuy))
+        if (themeToBuy.IsBought)
         {
-            throw new Exception($"User {request.UserId} already has theme {request.ThemeId}.");
+            throw new Exception($"User {request.UserId} already has bought theme {request.themeId}.");
         }
 
-        var user = await _userRepository.GetUserById(request.UserId, cancellationToken);
         if (user == null)
         {
             throw new Exception($"User {request.UserId} not found.");
@@ -45,7 +42,8 @@ public class BuyThemeCommandHandler : IRequestHandler<BuyThemeCommand, Unit>
         
         user.Statistics.Points -= themeToBuy.Cost;
         themeToBuy.IsBought = true;
-        user.UnlockedThemes.Add(themeToBuy);
+        
+        user.UserTheme.Add(themeToBuy);
         await _userRepository.UpdateUser(user, cancellationToken);
         
         return Unit.Value;

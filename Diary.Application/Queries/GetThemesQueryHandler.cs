@@ -1,24 +1,31 @@
 ﻿namespace Diary.Application.Queries;
 
 using Domain.Interfaces;
-using DTOs;
+using Domain.Models;
 using MediatR;
 
-public sealed record GetThemesQuery : IRequest<List<ThemeDto>>;
-
-public class GetThemesQueryHandler : IRequestHandler<GetThemesQuery, List<ThemeDto>>
+public sealed record GetThemesQuery : IRequest<List<UserTheme>>
 {
-    private readonly IThemesRepository _themesRepository;
+    public string UserId { get; set; }
+}
+public class GetThemesQueryHandler : IRequestHandler<GetThemesQuery, List<UserTheme>>
+{
+    private readonly IUserRepository _userRepository;
 
-    public GetThemesQueryHandler(IThemesRepository themesRepository)
+    public GetThemesQueryHandler(IUserRepository userRepository)
     {
-        _themesRepository = themesRepository;
+        _userRepository = userRepository;
     }
 
-    public async Task<List<ThemeDto>> Handle(GetThemesQuery request, CancellationToken cancellationToken)
-    { 
-        var themesEntity = await _themesRepository.GetThemesAsync();
+    public async Task<List<UserTheme>> Handle(GetThemesQuery request, CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.GetUserById(request.UserId, cancellationToken);
         
-        return ThemeDto.ListToDto(themesEntity);
+        if (user.UserTheme == null || user.UserTheme.Count == 0)
+        {
+            await _userRepository.SeedThemes(request.UserId, cancellationToken);
+        }
+
+        return user.UserTheme!;
     }
 }

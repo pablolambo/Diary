@@ -4,6 +4,7 @@ using Diary.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Diary.Infrastructure.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250203180352_NullableFirebaseToken")]
+    partial class NullableFirebaseToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,49 +54,49 @@ namespace Diary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fed5383d-b9dd-4fc8-a4bb-b4158471c04e"),
+                            Id = new Guid("5f6862ac-9a17-488e-8513-1074ce3d2c0d"),
                             Name = "Your first entry",
                             Type = 1,
                             Value = 1
                         },
                         new
                         {
-                            Id = new Guid("d05c28cc-bcfd-462a-9256-5cad58747b10"),
+                            Id = new Guid("d1de5b43-f45c-4f65-a096-8442b977e751"),
                             Name = "3 day streak",
                             Type = 0,
                             Value = 3
                         },
                         new
                         {
-                            Id = new Guid("f25f69d4-2bc3-4ba9-914f-4b466f9ec56a"),
+                            Id = new Guid("0384ee5c-9d76-4fa9-b84f-381da7889a23"),
                             Name = "5 day streak",
                             Type = 0,
                             Value = 5
                         },
                         new
                         {
-                            Id = new Guid("11383a9b-d0ca-4b1f-abee-fdecf0a49f8a"),
+                            Id = new Guid("d3b6c14a-3ce4-42f7-bad8-206328767406"),
                             Name = "7 day streak",
                             Type = 0,
                             Value = 7
                         },
                         new
                         {
-                            Id = new Guid("a5f77bf0-284e-4660-9b94-d59487316544"),
+                            Id = new Guid("4294f539-22ed-4e6d-9609-edfaed587a04"),
                             Name = "10 total entries",
                             Type = 1,
                             Value = 10
                         },
                         new
                         {
-                            Id = new Guid("5ba1b8ff-2d18-4eb5-af37-7bf238d04d23"),
+                            Id = new Guid("76ab3fb7-e6dc-490f-9139-9028b3e234d9"),
                             Name = "25 total entries",
                             Type = 1,
                             Value = 25
                         },
                         new
                         {
-                            Id = new Guid("5e0adf75-4310-4dcd-99ef-b5257ccac7e1"),
+                            Id = new Guid("fd17e06f-6050-4b81-96b3-9ff43bf2a795"),
                             Name = "50 total entries",
                             Type = 1,
                             Value = 50
@@ -226,13 +229,15 @@ namespace Diary.Infrastructure.Migrations
 
                     b.HasIndex("DiaryUserEntityId");
 
+                    b.HasIndex("EntryEntityId");
+
                     b.HasIndex("UserId", "Name")
                         .IsUnique();
 
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Diary.Domain.Models.UserTheme", b =>
+            modelBuilder.Entity("Diary.Domain.Entities.ThemeEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,30 +263,40 @@ namespace Diary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DiaryUserEntityId");
 
-                    b.ToTable("UserThemes");
-                });
+                    b.ToTable("Themes");
 
-            modelBuilder.Entity("EntryEntityTagEntity", b =>
-                {
-                    b.Property<Guid>("EntryEntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EntryTagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EntryEntityId", "EntryTagsId");
-
-                    b.HasIndex("EntryTagsId");
-
-                    b.ToTable("EntryEntityTagEntity");
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("35b5c319-b65f-46ac-9b74-bf78103dad79"),
+                            Cost = 100,
+                            IsBought = false,
+                            IsSelected = false,
+                            PrimaryColor = "Blue",
+                            SecondaryColor = "LightBlue"
+                        },
+                        new
+                        {
+                            Id = new Guid("e378f4dd-cf18-489e-937d-a81c40d8836b"),
+                            Cost = 250,
+                            IsBought = false,
+                            IsSelected = false,
+                            PrimaryColor = "Red",
+                            SecondaryColor = "DarkRed"
+                        },
+                        new
+                        {
+                            Id = new Guid("0eab4d32-c026-40d7-8ad1-c6e42ba0dbf2"),
+                            Cost = 500,
+                            IsBought = false,
+                            IsSelected = false,
+                            PrimaryColor = "Green",
+                            SecondaryColor = "DarkGreen"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -473,28 +488,21 @@ namespace Diary.Infrastructure.Migrations
                     b.HasOne("Diary.Domain.Entities.DiaryUserEntity", null)
                         .WithMany("EntryTags")
                         .HasForeignKey("DiaryUserEntityId");
-                });
 
-            modelBuilder.Entity("Diary.Domain.Models.UserTheme", b =>
-                {
-                    b.HasOne("Diary.Domain.Entities.DiaryUserEntity", null)
-                        .WithMany("UserTheme")
-                        .HasForeignKey("DiaryUserEntityId");
-                });
-
-            modelBuilder.Entity("EntryEntityTagEntity", b =>
-                {
-                    b.HasOne("Diary.Domain.Entities.EntryEntity", null)
-                        .WithMany()
+                    b.HasOne("Diary.Domain.Entities.EntryEntity", "EntryEntity")
+                        .WithMany("EntryTags")
                         .HasForeignKey("EntryEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Diary.Domain.Entities.TagEntity", null)
-                        .WithMany()
-                        .HasForeignKey("EntryTagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("EntryEntity");
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.ThemeEntity", b =>
+                {
+                    b.HasOne("Diary.Domain.Entities.DiaryUserEntity", null)
+                        .WithMany("UnlockedThemes")
+                        .HasForeignKey("DiaryUserEntityId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -554,7 +562,12 @@ namespace Diary.Infrastructure.Migrations
 
                     b.Navigation("UnlockedBadges");
 
-                    b.Navigation("UserTheme");
+                    b.Navigation("UnlockedThemes");
+                });
+
+            modelBuilder.Entity("Diary.Domain.Entities.EntryEntity", b =>
+                {
+                    b.Navigation("EntryTags");
                 });
 #pragma warning restore 612, 618
         }
