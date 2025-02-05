@@ -89,8 +89,13 @@ public class EntriesController : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         if (id == Guid.Empty) return BadRequest();
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+     
+        if (userId == null)
+            throw new UnauthorizedAccessException("User is not authenticated.");
 
-        await _mediator.Send(new DeleteEntryCommand(id));
+        await _mediator.Send(new DeleteEntryCommand(id, userId));
         return NoContent();
     }
 }
