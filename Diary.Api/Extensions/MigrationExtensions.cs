@@ -13,4 +13,4 @@ public static class MigrationExtensions
         
         context.Database.Migrate();
     }
-}
+} 

@@ -41,7 +41,7 @@ public class BadgesTests
                 CurrentDayStreak = 0,
                 TotalEntries = 10
             },
-            UnlockedBadges = new List<BadgeEntity>()
+            EarnedBadges = new List<UserBadgeEntity>()
         };
 
         var badgesAwarded = await _badgesUtilities.UserBadgesAwarded(user, CancellationToken.None);
@@ -139,7 +139,6 @@ public class BadgesTests
         return badges;
     }
 }
-
 
 // Naming your tests
 //     The name of your test should consist of three parts:

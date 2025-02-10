@@ -20,6 +20,7 @@ public class DiaryDbContext(DbContextOptions<DiaryDbContext> options) : Identity
         modelBuilder.ApplyConfiguration(new DiaryUserConfiguration());
         modelBuilder.ApplyConfiguration(new EntryConfiguration());
         modelBuilder.ApplyConfiguration(new TagEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new UserBadgeConfiguration());
         
         modelBuilder.Entity<BadgeEntity>()
             .HasKey(b => b.Id);

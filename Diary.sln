@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diary.Infrastructure", "Dia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diary.UnitTests", "Diary.UnitTests\Diary.UnitTests.csproj", "{1D5B7D2F-5988-4912-B3D6-06370566F86B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diary.IntegrationTests", "Diary.IntegrationTests\Diary.IntegrationTests.csproj", "{646B50B3-22E6-413E-9AB3-CD9CB895D2A1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diary.Application", "Diary.Application\Diary.Application.csproj", "{D8DE84EB-1268-4B12-92E1-F71C4CDF3C33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A24F6509-8711-44E4-A60B-13A69131C1D5}"
@@ -47,10 +45,6 @@ Global
 		{1D5B7D2F-5988-4912-B3D6-06370566F86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D5B7D2F-5988-4912-B3D6-06370566F86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D5B7D2F-5988-4912-B3D6-06370566F86B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{646B50B3-22E6-413E-9AB3-CD9CB895D2A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{646B50B3-22E6-413E-9AB3-CD9CB895D2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{646B50B3-22E6-413E-9AB3-CD9CB895D2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{646B50B3-22E6-413E-9AB3-CD9CB895D2A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D8DE84EB-1268-4B12-92E1-F71C4CDF3C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D8DE84EB-1268-4B12-92E1-F71C4CDF3C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8DE84EB-1268-4B12-92E1-F71C4CDF3C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,7 +54,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{646B50B3-22E6-413E-9AB3-CD9CB895D2A1} = {A24F6509-8711-44E4-A60B-13A69131C1D5}
 		{1D5B7D2F-5988-4912-B3D6-06370566F86B} = {A24F6509-8711-44E4-A60B-13A69131C1D5}
 	EndGlobalSection
 EndGlobal

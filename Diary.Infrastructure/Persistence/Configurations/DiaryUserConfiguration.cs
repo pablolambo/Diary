@@ -10,6 +10,11 @@ public class DiaryUserConfiguration : IEntityTypeConfiguration<DiaryUserEntity>
     {
         builder.HasKey(e => e.Id);
         
+        builder.HasMany(u => u.EarnedBadges)
+            .WithOne(ub => ub.User)
+            .HasForeignKey(ub => ub.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         builder.OwnsOne(u => u.Statistics, statistics =>
         {
             statistics.Property(s => s.TotalEntries).IsRequired();

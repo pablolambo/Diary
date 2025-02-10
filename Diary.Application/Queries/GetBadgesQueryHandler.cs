@@ -4,7 +4,7 @@ using Domain.Interfaces;
 using DTOs;
 using MediatR;
 
-public sealed record GetBadgesQuery : IRequest<List<BadgeDto>>;
+public sealed record  GetBadgesQuery : IRequest<List<BadgeDto>>;
 
 public class GetBadgesQueryHandler : IRequestHandler<GetBadgesQuery, List<BadgeDto>>
 {

@@ -62,7 +62,7 @@ public class UserRepository : IUserRepository
         var user = await _dbContext.Users
             .Include(u => u.EntryTags)
             .Include(u => u.UserTheme)
-            .Include(u => u.UnlockedBadges)
+            .Include(u => u.EarnedBadges)
             .Include(u => u.Statistics)
             .FirstOrDefaultAsync(u => u.Id == diaryUserId, cancellationToken: cancellationToken);
 
@@ -109,7 +109,6 @@ public class UserRepository : IUserRepository
                 }
             ];
             
-            //_dbContext.Users.ExecuteUpdateAsync(user, cancellationToken: cancellationToken);
             await _dbContext.UserThemes.AddRangeAsync(user.UserTheme, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

@@ -26,7 +26,7 @@ public class BadgesUtilities
         {
             if (user.Statistics.CurrentDayStreak >= streakBadge.Value)
             {
-                if (user.UnlockedBadges.All(unlockedBadge => unlockedBadge.Name != streakBadge.Name))
+                if (user.EarnedBadges.All(unlockedBadge => unlockedBadge.Name != streakBadge.Name))
                 {
                     badgesAwarded.Add(streakBadge);
                 }
@@ -37,7 +37,7 @@ public class BadgesUtilities
         {
             if (user.Statistics.TotalEntries >= totalEntriesBadge.Value)
             {
-                if (user.UnlockedBadges.All(unlockedBadge => unlockedBadge.Name != totalEntriesBadge.Name))
+                if (user.EarnedBadges.All(unlockedBadge => unlockedBadge.Name != totalEntriesBadge.Name))
                 {
                     badgesAwarded.Add(totalEntriesBadge);
                 }
@@ -54,7 +54,24 @@ public class BadgesUtilities
     
     private async Task AwardUser(DiaryUserEntity user, BadgeEntity badge, CancellationToken cancellationToken)
     {
-        user.UnlockedBadges.Add(badge);
+        var hasEarnedBadge = user.EarnedBadges.Any(ub => ub.Name == badge.Name);
+        if (hasEarnedBadge)
+        {
+            return;
+        }
+
+        var userBadge = new UserBadgeEntity
+        {
+            UserId = user.Id,
+            BadgeId = badge.Id,
+            DateEarned = DateTime.UtcNow,
+            Value = badge.Value,
+            Name = badge.Name,
+            Type = badge.Type
+        };
+
+        user.EarnedBadges.Add(userBadge);
+        
         user.Statistics.Points += 500;
         await _userRepository.UpdateUser(user, cancellationToken);
     }
